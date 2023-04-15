@@ -564,13 +564,13 @@ class CustomNetV3UltraInsaneAmountOfParams(nn.Module):
 
         self.group1 = nn.Sequential(
             nn.Conv2d(13, 1024, kernel_size=3, stride=stride, padding=padding, device=device),
-            nn.BatchNorm2d(num_features=512,device=device),
+            nn.BatchNorm2d(num_features=1024,device=device),
             nn.ReLU(),
         )
 
         self.group2 = nn.Sequential(
             nn.Conv2d(13, 1024, kernel_size=8, stride=stride, padding=padding, device=device),
-            nn.BatchNorm2d(num_features=512, device=device),
+            nn.BatchNorm2d(num_features=1024, device=device),
             nn.ReLU(),
         )
 
