@@ -25,6 +25,8 @@ You have two options: Prepare a certain percentage of the dataset yourself, or d
 The prepared dataset can be downloaded using [this link](https://drive.google.com/file/d/1tWDLtThdnAhZGlFq_yN_kd3Gn9Q2Yqld/view?usp=share_link).
 Please extract the files into the `data_preparation` subdirectory.
 
+**Please note: The model has been tuned for usage with the full dataset.**
+
 #### DYI
 The unprocessed dataset `chessData.csv` (taken from [Kaggle](https://www.kaggle.com/datasets/ronakbadhe/chess-evaluations))
 can be downloaded using [this link](https://drive.google.com/file/d/1Ar7sU1Y-2MCxhwcC6P_woSIDf3KDHPgP/view?usp=share_link).
@@ -38,11 +40,19 @@ This will prepare 5% of the dataset for you, which will take 25 minutes and 2.5G
 Feel free to change the percentage of the dataset at the bottom of `prep.py`: The second parameter
 of the call `StockFishDataPreparation("./chessData.csv", 0.05)`.
 
-**Please note: The full dataset takes about 50GB of disk space**
+**Please note: The full dataset takes about 50GB of disk space.**
 
 ### Run Training
 After the dataset has been downloaded or prepared, you can run
 `train.py` to start training the model.
 ```bash
 python train.py
+```
+
+### Evaluation after Training
+Change the model path in `eval.py` (line 31) to the output of your training,
+which you will find in the `runs` subdirectory.
+
+```python
+model.load_state_dict(torch.load("YOUR_PATH_HERE"))
 ```
