@@ -20,9 +20,9 @@ device = torch.device(dev)
 pieces = ['-', # empty
           'r', 'n', 'b', 'q', 'k', 'p', 
           'R', 'N', 'B', 'Q', 'K', 'P']
-piece_values = [0,                  # Unsure what would be the right amount for king
-                -5 ,-3, -3, -9, -2 ,-1,   # Don't think a higher number is the right way to go as it may overshadow the rest of the pieces
-                5 ,3, 3, 9, 2 ,1,]  # 2 for now
+piece_values = [0,
+                -5 ,-3, -3, -9, -2 ,-1,
+                5 ,3, 3, 9, 2 ,1,]
 
 def fen_to_matrix(fen: str):
   """ Convert FEN board notation to a matrix
@@ -78,7 +78,6 @@ def mat_to_input_tensor(board_mat, fen_string):
   """
   # Preparation for generating legal moves
   algebraic_to_index = {f"{file}{rank}": (8 - rank, ord(file) - ord('a')) for rank in range(8, 0, -1) for file in 'abcdefgh'}
-  ## moves_by_piece_type = {chess.PAWN: [], chess.KNIGHT: [], chess.BISHOP: [], chess.ROOK: [], chess.QUEEN: [], chess.KING: []}
   moves_by_piece_type = {'P': [], 'N': [], 'B': [], 'R': [], 'Q': [], 'K': [], 'p': [], 'n': [], 'b': [], 'r': [], 'q': [], 'k': []}
   board = chess.Board(fen_string)
 
@@ -110,7 +109,7 @@ class StockFishDataPreparation():
     self.data['Evaluation'] = self.data['Evaluation'].apply(lambda x: x if x[0] != '#' else x[1] + "10000")
     self.data['Evaluation'] = self.data['Evaluation'].apply(lambda x: x if (not x.startswith('\ufeff')) else x[1:])
     self.data['Evaluation'] = self.data['Evaluation'].astype(float)
-    self.data['Evaluation'] = self.data['Evaluation'].apply(lambda x: sigmoid(x/1000))  # /1000 !
+    self.data['Evaluation'] = self.data['Evaluation'].apply(lambda x: sigmoid(x/1000))
 
   def prepareAndSaveToDisk(self, output_tensors, output_evals):
     with open(output_tensors, 'ab') as f_tensors:
@@ -133,7 +132,8 @@ class StockFishDataPreparation():
     with open("len", "w") as f:
       f.write(str(len(self.data)))
 
-# Prepare 5% of the data (takes ~25 min)
-# Save to files "tensors","eval", "len"
-data_prep = StockFishDataPreparation("./chessData.csv", 0.05)
-data_prep.prepareAndSaveToDisk("tensors", "eval")
+if __name__ == "__main__":
+  # Prepare 5% of the data (takes ~25 min)
+  # Save to files "tensors","eval", "len"
+  data_prep = StockFishDataPreparation("./chessData.csv", 0.05)
+  data_prep.prepareAndSaveToDisk("tensors", "eval")

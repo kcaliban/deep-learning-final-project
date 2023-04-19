@@ -1,7 +1,6 @@
 import torch
 from datetime import datetime
 import numpy as np
-from livelossplot import PlotLosses
 import os
 import gc
 from model import *
@@ -21,7 +20,7 @@ learning_rate = 0.01
     
 print(datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
 
-dataset = loadDataSet("./50percent_x_divided_1000")
+dataset = loadDataSet("./data_preparation")
 dataset_train, dataset_validation = torch.utils.data.random_split(dataset, [0.8, 0.2])
 dataloader = torch.utils.data.DataLoader(dataset_train, batch_size=batch_size, shuffle=True)
 dataloader_validation = torch.utils.data.DataLoader(dataset_validation, batch_size=batch_size, shuffle=False)
@@ -37,6 +36,7 @@ params = sum([np.prod(p.size()) for p in model_parameters])
 print(f'number of params: {params}')
 print(f'dataset size: {len(dataset)}')
 
+# Taken and adjusted from https://pytorch.org/tutorials/beginner/introyt/trainingyt.html
 def train_one_epoch(epoch_index):
     running_loss = 0.
     last_loss = 0.
@@ -93,8 +93,6 @@ logwriter.write("train\tval\t\n")
 epoch_number = 0
 
 best_vloss = 1_000_000.
-
-liveloss = PlotLosses()
 
 losses = []
 vlosses = []
