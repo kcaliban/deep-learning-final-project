@@ -1,5 +1,5 @@
 # CSC413/2516 Final Project: Evaluating Chess Positions using Convolutional Neural Networks
-![Scatterplot of final model](figures/scatterplot.png)
+<img src="figures/scatterplot.png" width="400">
 
 This repository contains our final project for the course [Neural Networks and Deep Learning](https://uoft-csc413.github.io/2023/) by Jimmy Ba and Bo Wang at the University of Toronto.
 
