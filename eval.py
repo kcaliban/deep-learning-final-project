@@ -44,7 +44,7 @@ eval = model(torch.reshape(tensor, (-1, 13, 8, 8))).detach().cpu().item()
 centipawns = to_centipawns(eval)
 
 # Print result
-if MAX_CENTIPAWN_VALUE - abs(centipawns) < 100:
+if abs(MAX_CENTIPAWN_VALUE - centipawns) < 100:
     if centipawns < 0:
         print("Mate for black in unknown amount of moves")
     else:
