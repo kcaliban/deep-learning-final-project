@@ -21,14 +21,14 @@ learning_rate = 0.01
     
 print(datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
 
-dataset = loadDataSet("./5percent_x_divided_1000")
+dataset = loadDataSet("./50percent_x_divided_1000")
 dataset_train, dataset_validation = torch.utils.data.random_split(dataset, [0.8, 0.2])
 dataloader = torch.utils.data.DataLoader(dataset_train, batch_size=batch_size, shuffle=True)
 dataloader_validation = torch.utils.data.DataLoader(dataset_validation, batch_size=batch_size, shuffle=False)
 
 print(datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
 
-model = CustomNetV2Div1000(device).to(device)
+model = CustomNetV3(device).to(device)
 optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate)
 criterion = nn.MSELoss()
 
