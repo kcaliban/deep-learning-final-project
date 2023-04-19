@@ -1,4 +1,6 @@
 # CSC413/2516 Final Project: Evaluating Chess Positions using Convolutional Neural Networks
+![Scatterplot of final model](figures/scatterplot.png)
+
 This repository contains our final project for the course [Neural Networks and Deep Learning](https://uoft-csc413.github.io/2023/) by Jimmy Ba and Bo Wang at the University of Toronto.
 
 ## Installing dependencies
@@ -33,6 +35,8 @@ After downloading the dataset, proceed as follows:
 This will prepare 5% of the dataset for you, which will take 25 minutes and 2.5GB of disk space.
 Feel free to change the percentage of the dataset at the bottom of `prep.py`: The second parameter
 of the call `StockFishDataPreparation("./chessData.csv", 0.05)`.
+
+**Please note: The full dataset takes about 50GB of disk space**
 
 ### Run Training
 After the dataset has been downloaded or prepared, you can run
