@@ -137,7 +137,6 @@ class CustomNetV2(nn.Module):
        x7 = self.linear(x6)
        return self.sigmoid(x7/100)
 
-
 class CustomNetV3(nn.Module):
     def __init__(self, device):
         super().__init__()
@@ -146,38 +145,96 @@ class CustomNetV3(nn.Module):
         padding = 0
 
         self.group1 = nn.Sequential(
-            nn.Conv2d(13, 512, kernel_size=3, stride=stride, padding=padding, device=device),
-            nn.BatchNorm2d(num_features=512,device=device),
+            nn.Conv2d(13, 1024, kernel_size=3, stride=stride, padding=padding, device=device),
+            nn.BatchNorm2d(num_features=1024,device=device),
             nn.ReLU(),
         )
 
         self.group2 = nn.Sequential(
-            nn.Conv2d(13, 512, kernel_size=8, stride=stride, padding=padding, device=device),
-            nn.BatchNorm2d(num_features=512, device=device),
+            nn.Conv2d(13, 1024, kernel_size=8, stride=stride, padding=padding, device=device),
+            nn.BatchNorm2d(num_features=1024, device=device),
             nn.ReLU(),
         )
 
         self.group3 = nn.Sequential(
-            nn.Conv2d(512, 256, kernel_size=3, stride=stride, padding=padding, device=device),
-            nn.BatchNorm2d(num_features=256, device=device),
+            nn.Conv2d(1024, 512, kernel_size=3, stride=stride, padding=padding, device=device),
+            nn.BatchNorm2d(num_features=512, device=device),
             nn.ReLU(),
         )
 
         self.group4 = nn.Sequential(
-            nn.Conv2d(256, 128, kernel_size=3, stride=stride, padding=padding, device=device),
+            nn.Conv2d(512, 256, kernel_size=3, stride=stride, padding=padding, device=device),
             nn.MaxPool2d(kernel_size=2, stride=2, padding=padding),
-            nn.BatchNorm2d(num_features=128, device=device),
+            nn.BatchNorm2d(num_features=256, device=device),
             nn.ReLU(),
         )
 
         self.group5 = nn.Sequential(
-            nn.Conv2d(128 + 512, 64, kernel_size=1, stride=stride, padding=padding, device=device),
-            nn.BatchNorm2d(num_features=64, device=device),
+            nn.Conv2d(256 + 1024, 128, kernel_size=1, stride=stride, padding=padding, device=device),
+            nn.BatchNorm2d(num_features=128, device=device),
             nn.ReLU(),
         )
 
         # Linear layer
-        self.linear = nn.Linear(64, 1, device=device)
+        self.linear = nn.Linear(128, 1, device=device)
+
+        # Sigmoid
+        self.sigmoid = nn.Sigmoid()
+
+    def forward(self, x):
+       x1 = self.group1(x)
+       # print(x1.size())
+       x2 = self.group2(x)
+       # print(x2.size())
+       x3 = self.group3(x1)
+       x4 = self.group4(x3)
+       # print(x3.size())
+       x5 = torch.cat((x2, x4), dim=1)
+       x6 = self.group5(x5)
+       x7 = torch.flatten(x6, start_dim=1)
+       x8 = self.linear(x7)
+       return self.sigmoid(x8/1000)
+    
+class CustomNetV3Div5000(nn.Module):
+    def __init__(self, device):
+        super().__init__()
+
+        stride = 1
+        padding = 0
+
+        self.group1 = nn.Sequential(
+            nn.Conv2d(13, 1024, kernel_size=3, stride=stride, padding=padding, device=device),
+            nn.BatchNorm2d(num_features=1024,device=device),
+            nn.ReLU(),
+        )
+
+        self.group2 = nn.Sequential(
+            nn.Conv2d(13, 1024, kernel_size=8, stride=stride, padding=padding, device=device),
+            nn.BatchNorm2d(num_features=1024, device=device),
+            nn.ReLU(),
+        )
+
+        self.group3 = nn.Sequential(
+            nn.Conv2d(1024, 512, kernel_size=3, stride=stride, padding=padding, device=device),
+            nn.BatchNorm2d(num_features=512, device=device),
+            nn.ReLU(),
+        )
+
+        self.group4 = nn.Sequential(
+            nn.Conv2d(512, 256, kernel_size=3, stride=stride, padding=padding, device=device),
+            nn.MaxPool2d(kernel_size=2, stride=2, padding=padding),
+            nn.BatchNorm2d(num_features=256, device=device),
+            nn.ReLU(),
+        )
+
+        self.group5 = nn.Sequential(
+            nn.Conv2d(256 + 1024, 128, kernel_size=1, stride=stride, padding=padding, device=device),
+            nn.BatchNorm2d(num_features=128, device=device),
+            nn.ReLU(),
+        )
+
+        # Linear layer
+        self.linear = nn.Linear(128, 1, device=device)
 
         # Sigmoid
         self.sigmoid = nn.Sigmoid()
@@ -191,4 +248,4 @@ class CustomNetV3(nn.Module):
        x6 = self.group5(x5)
        x7 = torch.flatten(x6, start_dim=1)
        x8 = self.linear(x7)
-       return self.sigmoid(x8/1000)
+       return self.sigmoid(x8/5000)
